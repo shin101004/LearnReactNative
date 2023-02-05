@@ -1,21 +1,32 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
-import Counter from './components/Counter';
+import React from 'react';
+import {KeyboardAvoidingView, StyleSheet, Platform} from 'react-native';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import AddTodo from './components/todo/AddTodo';
+import DateHead from './components/todo/DateHead';
+import Empty from './components/todo/Empty';
 
 function App(): JSX.Element {
-  const [count, setCount] = useState(0);
-
-  const onIncrease = () => setCount(prev => prev + 1);
-  const onDecrease = () => setCount(prev => prev - 1);
+  const today = new Date();
   return (
-    <SafeAreaView style={styles.full}>
-      <Counter count={count} onIncrease={onIncrease} onDecrease={onDecrease} />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView edges={['bottom']} style={styles.block}>
+        <KeyboardAvoidingView
+          behavior={Platform.select({ios: 'padding'})}
+          style={styles.avoid}>
+          <DateHead date={today} />
+          <Empty />
+          <AddTodo />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  full: {
+  block: {
+    flex: 1,
+  },
+  avoid: {
     flex: 1,
   },
 });
